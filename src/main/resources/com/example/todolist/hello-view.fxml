@@ -7,14 +7,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.todolist.HelloController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.todolist.HelloController">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="580.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="401.0" prefWidth="524.0">
          <children>
-            <ComboBox fx:id="chooseDay" layoutX="337.0" layoutY="207.0" onAction="#Weekday" prefWidth="150.0" promptText="WeekDay" />
-            <TextField fx:id="addToDo" layoutX="305.0" layoutY="161.0" onAction="#type" promptText="Text Here" />
-            <ListView fx:id="todos" layoutX="78.0" layoutY="86.0" onKeyPressed="#deleteKey" prefHeight="200.0" prefWidth="200.0" />
-            <Button fx:id="Add" layoutX="487.0" layoutY="161.0" mnemonicParsing="false" onAction="#initialize" text="Button" />
+            <ComboBox fx:id="chooseDay" layoutX="286.0" layoutY="220.0" onAction="#Weekday" prefWidth="150.0" promptText="WeekDay" />
+            <TextField fx:id="addToDo" layoutX="286.0" layoutY="142.0" onAction="#type" prefHeight="25.0" prefWidth="150.0" promptText="Text Here" />
+            <ListView fx:id="todos" layoutX="55.0" layoutY="117.0" onKeyPressed="#deleteKey" prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="Add" layoutX="446.0" layoutY="142.0" mnemonicParsing="false" onAction="#initialize" text="Button" />
+            <Button fx:id="save" layoutX="286.0" layoutY="317.0" mnemonicParsing="false" onAction="#saveData" prefHeight="25.0" prefWidth="60.0" text="Save" />
+            <Button fx:id="restore" layoutX="376.0" layoutY="317.0" mnemonicParsing="false" onAction="#restoreData" prefHeight="25.0" prefWidth="60.0" text="Restore" />
          </children></AnchorPane>
   </content>
 </ScrollPane>

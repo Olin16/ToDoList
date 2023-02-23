@@ -7,12 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class HelloController {
 
     public Button Add;
+
+    public Button save;
+
+    public Button restore;
 
     public TextField addToDo;
 
@@ -21,27 +25,21 @@ public class HelloController {
     public ComboBox chooseDay;
 
 
-    int mondayTodos;
-    int tuesdayTodos;
-    int wednesdayTodos;
-    int thursdayTodos;
-    int fridayTodos;
-    int saturdayTodos;
-    int sundayTodos;
 
-    ObservableList<ArrayList> week;
-    ArrayList monday = new ArrayList();
-    ArrayList tuesday = new ArrayList();
-    ArrayList wednesday = new ArrayList();
-    ArrayList thursday = new ArrayList();
-    ArrayList friday = new ArrayList();
-    ArrayList saturday = new ArrayList();
-    ArrayList sunday = new ArrayList();
+
+    ArrayList<ObservableList> week;
+    ObservableList monday = FXCollections.observableArrayList();
+    ObservableList tuesday = FXCollections.observableArrayList();
+    ObservableList wednesday = FXCollections.observableArrayList();
+    ObservableList thursday = FXCollections.observableArrayList();
+    ObservableList friday = FXCollections.observableArrayList();
+    ObservableList saturday = FXCollections.observableArrayList();
+    ObservableList sunday = FXCollections.observableArrayList();
 
     int currentWeekday;
 
     public void initialize() {
-        week = FXCollections.observableArrayList();
+        week = new ArrayList<ObservableList>();
 
         week.add(monday);
         chooseDay.getItems().add("monday");
@@ -60,31 +58,25 @@ public class HelloController {
 
         chooseDay.getSelectionModel().select(currentWeekday);
 
-        todos.setItems(week);
+        todos.setItems(week.get(0));
     }
 
       public void type () {
            String bob = addToDo.getText();
-            monday.add(bob);
-            week.add(monday);
-        }
+
+          int selectedIndex = chooseDay.getSelectionModel().getSelectedIndex();
+
+          week.get(selectedIndex).add(bob);
+
+
+      }
 
         public void Weekday() {
-       /* currentWeekday = chooseDay.getSelectionModel().getSelectedIndex();
-        Object selectedItem = chooseDay.getSelectionModel().getSelectedItem();
-
-
-            System.out.println("Selection made: [" + currentWeekday + "] " + selectedItem);
-            System.out.println("   ChoiceBox.getValue(): " + chooseDay.getValue());
-*/
-            chooseDay.setOnAction((event) -> {
                 int selectedIndex = chooseDay.getSelectionModel().getSelectedIndex();
                 Object selectedItem = chooseDay.getSelectionModel().getSelectedItem();
-
+                todos.setItems(week.get(selectedIndex));
                 System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
                 System.out.println("   ChoiceBox.getValue(): " + chooseDay.getValue());
-            });
-
         }
 
     public void deleteKey( final KeyEvent keyEvent )
@@ -102,6 +94,57 @@ public class HelloController {
                 //text.clear
             }
         }
+    }
+
+    public void saveData() throws Exception {
+        FileOutputStream fileOut =
+                new FileOutputStream("RestoredList");
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        for (ObservableList<ArrayList> eachDay: week) {
+            ArrayList tempArrayList = new ArrayList(eachDay);
+            out.writeObject(tempArrayList);
+        }
+        out.close();
+        fileOut.close();
+    }
+
+    public void restoreData() throws Exception {
+        FileInputStream fileIn = new FileInputStream("RestoredList");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        ArrayList<String> mondayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> tuesdayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> wednesdayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> thursdayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> fridayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> saturdayList = (ArrayList<String>) in.readObject();
+        ArrayList<String> sundayList = (ArrayList<String>) in.readObject();
+
+        week = new ArrayList<ObservableList>();
+
+        //week.remove(currentWeekday);
+        monday = FXCollections.observableArrayList(mondayList);
+        week.add(monday);
+        tuesday = FXCollections.observableArrayList(tuesdayList);
+        week.add(tuesday);
+        wednesday = FXCollections.observableArrayList(wednesdayList);
+        week.add(wednesday);
+        thursday = FXCollections.observableArrayList(thursdayList);
+        week.add(thursday);
+        friday = FXCollections.observableArrayList(fridayList);
+        week.add(friday);
+        saturday = FXCollections.observableArrayList(saturdayList);
+        week.add(saturday);
+        sunday = FXCollections.observableArrayList(sundayList);
+        week.add(sunday);
+
+        System.out.println(week);
+
+        int selectedIndex = chooseDay.getSelectionModel().getSelectedIndex();
+        todos.setItems(week.get(selectedIndex));
+
+        // create new ObservableList containing the 7 arrayLists
+        in.close();
+        fileIn.close();
     }
 
 
